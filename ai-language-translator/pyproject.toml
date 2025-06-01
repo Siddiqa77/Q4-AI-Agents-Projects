@@ -1,15 +1,14 @@
 [project]
 name = "ai-language-translator"
 version = "0.1.0"
-description = "Translate English text into multiple languages using Gemini AI and Streamlit."
+description = "A Streamlit app to translate English text into various languages using Gemini AI."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 
 dependencies = [
     "streamlit",
-    "python-dotenv",
     "google-generativeai"
 ]
 
-[tool.setuptools]
-packages = ["."]
+[tool.uv]
+# Optional: speed up installs or configure caching

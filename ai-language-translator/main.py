@@ -9,7 +9,7 @@ st.set_page_config(page_title="🌐 AI Translator", layout="centered")
 
 # Load environment variables
 load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
+api_key = st.secrets["GEMINI_API_KEY"]
 
 # Check if API key is loaded
 if not api_key:
@@ -17,8 +17,6 @@ if not api_key:
     st.stop()
 
 # Set Gemini key
-# genai.configure(api_key=api_key)
-api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
 # Supported Languages
