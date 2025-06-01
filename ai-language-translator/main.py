@@ -17,6 +17,8 @@ if not api_key:
     st.stop()
 
 # Set Gemini key
+# genai.configure(api_key=api_key)
+api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
 # Supported Languages
