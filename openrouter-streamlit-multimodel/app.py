@@ -96,4 +96,5 @@ if user_prompt:
     with st.spinner("Thinking..."):
         reply = query_openrouter(selected_model_id, st.session_state.chat_history)
         st.session_state.chat_history.append({"role": "assistant", "content": reply})
-    st.experimental_rerun()
+    st.rerun()
+
