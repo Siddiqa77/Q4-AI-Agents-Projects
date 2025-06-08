@@ -4,7 +4,7 @@ import os
 
 # Load API key (first from Streamlit secrets, fallback to .env if local)
 try:
-    API_KEY = st.secrets["OPENROUTER_API_KEY"]
+    API_KEY = st.secrets.get["OPENROUTER_API_KEY"]
 except:
     from dotenv import load_dotenv
     load_dotenv()
