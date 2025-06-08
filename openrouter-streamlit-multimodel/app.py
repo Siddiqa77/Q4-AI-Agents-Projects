@@ -1,4 +1,7 @@
 import streamlit as st
+
+st.set_page_config(page_title="Multi-Model Chatbot", layout="centered")
+
 import requests
 import os
 
@@ -45,7 +48,7 @@ def query_openrouter(model, messages):
         return f"❌ Error: {response.text}"
 
 # App settings
-st.set_page_config(page_title="Multi-Model Chatbot", layout="centered")
+# st.set_page_config(page_title="Multi-Model Chatbot", layout="centered")
 
 # Sidebar
 with st.sidebar:
