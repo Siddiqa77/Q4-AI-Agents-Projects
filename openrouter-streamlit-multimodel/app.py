@@ -1,13 +1,18 @@
 import streamlit as st
 import requests
 import os
-from dotenv import load_dotenv
 
-# Load API key
-load_dotenv()
-API_KEY = os.getenv("OPENROUTER_API_KEY")
+# Load API key (first from Streamlit secrets, fallback to .env if local)
+try:
+    API_KEY = st.secrets["OPENROUTER_API_KEY"]
+except:
+    from dotenv import load_dotenv
+    load_dotenv()
+    API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+# Validate API key
 if not API_KEY:
-    st.error("🚨 Missing API Key. Please set OPENROUTER_API_KEY in your .env file or deployment secrets.")
+    st.error("🚨 Missing API Key. Please set OPENROUTER_API_KEY in your .env or Streamlit secrets.")
     st.stop()
 
 # Model list
@@ -41,7 +46,7 @@ def query_openrouter(model, messages):
 # App Config
 st.set_page_config(page_title="ChatGPT-Style Chatbot", layout="centered")
 
-# Sidebar controls
+# Sidebar
 with st.sidebar:
     st.header("⚙️ Settings")
     selected_model_name = st.selectbox("Choose a model:", list(MODELS.keys()))
@@ -56,24 +61,22 @@ user_color = "#005c4b" if dark_mode else "#DCF8C6"
 assistant_color = "#2c2c2c" if dark_mode else "#f1f1f1"
 text_color = "white" if dark_mode else "black"
 
-# CSS Styling
-st.markdown(
-    f"""
+# CSS
+st.markdown(f"""
     <style>
         .stChatMessage {{ color: {text_color}; }}
+        body {{ background-color: {bg_color}; color: {text_color}; }}
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
 # Title
 st.markdown(f"<h2 style='text-align: center; color:{text_color}'>🤖 Multi-Model Chatbot</h2>", unsafe_allow_html=True)
 
-# Chat history
+# Session
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Display previous messages
+# Display messages
 for msg in st.session_state.chat_history:
     align = "left" if msg["role"] == "assistant" else "right"
     bubble_color = assistant_color if msg["role"] == "assistant" else user_color
@@ -88,7 +91,7 @@ for msg in st.session_state.chat_history:
         unsafe_allow_html=True
     )
 
-# User input
+# Chat Input
 user_prompt = st.chat_input("Type your message here...")
 
 if user_prompt:
@@ -97,4 +100,3 @@ if user_prompt:
         reply = query_openrouter(selected_model_id, st.session_state.chat_history)
         st.session_state.chat_history.append({"role": "assistant", "content": reply})
     st.rerun()
-
