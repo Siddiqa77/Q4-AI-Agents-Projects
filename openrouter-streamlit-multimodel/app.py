@@ -1,5 +1,6 @@
 import streamlit as st
 
+# ✅ Must be the first Streamlit command
 st.set_page_config(page_title="Multi-Model Chatbot", layout="centered")
 
 import requests
@@ -19,7 +20,7 @@ if not API_KEY:
     st.error("🚨 Missing API Key. Please set OPENROUTER_API_KEY in your .env or Streamlit secrets.")
     st.stop()
 
-# Model list
+# Supported models
 MODELS = {
     "LLaMA 3 (8B)": "meta-llama/llama-3-8b-instruct",
     "DeepSeek R1": "deepseek/deepseek-r1",
@@ -28,7 +29,7 @@ MODELS = {
     "Mistral Small": "mistralai/devstral-small"
 }
 
-# Function to call OpenRouter API
+# Function to query OpenRouter API
 def query_openrouter(model, messages):
     url = "https://openrouter.ai/api/v1/chat/completions"
     headers = {
@@ -47,10 +48,7 @@ def query_openrouter(model, messages):
     else:
         return f"❌ Error: {response.text}"
 
-# App settings
-# st.set_page_config(page_title="Multi-Model Chatbot", layout="centered")
-
-# Sidebar
+# Sidebar settings
 with st.sidebar:
     st.header("⚙️ Settings")
     selected_model_name = st.selectbox("Choose a model:", list(MODELS.keys()))
@@ -59,15 +57,19 @@ with st.sidebar:
     st.markdown("---")
     st.caption("Powered by [OpenRouter](https://openrouter.ai)")
 
-# Theme colors
+# Theme configuration
 bg_color = "#1e1e1e" if dark_mode else "#ffffff"
 user_color = "#005c4b" if dark_mode else "#DCF8C6"
 assistant_color = "#2c2c2c" if dark_mode else "#f1f1f1"
 text_color = "white" if dark_mode else "black"
 
-# Custom chat bubble style
+# Apply custom CSS for styling
 st.markdown(f"""
     <style>
+        body {{
+            background-color: {bg_color};
+            color: {text_color};
+        }}
         .stChatMessage {{ color: {text_color}; }}
     </style>
 """, unsafe_allow_html=True)
@@ -75,11 +77,11 @@ st.markdown(f"""
 # Title
 st.markdown(f"<h2 style='text-align: center; color:{text_color}'>🤖 Multi-Model Chatbot</h2>", unsafe_allow_html=True)
 
-# Session state
+# Chat session state
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Show chat history
+# Display previous chat messages
 for msg in st.session_state.chat_history:
     align = "left" if msg["role"] == "assistant" else "right"
     bubble_color = assistant_color if msg["role"] == "assistant" else user_color
@@ -91,13 +93,13 @@ for msg in st.session_state.chat_history:
         </div>
     """, unsafe_allow_html=True)
 
-# User input
+# Input prompt
 user_prompt = st.chat_input("Type your message here...")
 
-# Handle new user message
+# Process user input
 if user_prompt:
     st.session_state.chat_history.append({"role": "user", "content": user_prompt})
     with st.spinner("Thinking..."):
         reply = query_openrouter(selected_model_id, st.session_state.chat_history)
         st.session_state.chat_history.append({"role": "assistant", "content": reply})
-    st.rerun()  # rerun to show the latest message
+    st.rerun()
