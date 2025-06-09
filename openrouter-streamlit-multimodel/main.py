@@ -14,7 +14,7 @@ except Exception:
     from dotenv import load_dotenv
     load_dotenv()
     API_KEY = os.getenv("OPENROUTER_API_KEY")
-st.write("🔐 API Key Loaded:", bool(API_KEY))
+
 # Validate API key
 if not API_KEY:
     st.error("🚨 Missing API Key. Please set OPENROUTER_API_KEY in your .env or Streamlit secrets.")
