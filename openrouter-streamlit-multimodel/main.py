@@ -103,3 +103,41 @@ if user_prompt:
         reply = query_openrouter(selected_model_id, st.session_state.chat_history)
         st.session_state.chat_history.append({"role": "assistant", "content": reply})
     st.rerun()
+
+
+# type: ignore
+# import requests
+# import os
+# from dotenv import load_dotenv
+
+# API_KEY = "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"
+
+# MODELS = {
+#     "LLaMA 3 (8B)": "meta-llama/llama-3-8b-instruct",
+#     "DeepSeek R1": "deepseek/deepseek-r1",
+#     "DeepSeek Chat V3": "deepseek/deepseek-chat-v3-0324",
+#     "alibaba": "google/gemini-2.0-flash-001",
+#     "Mistral Small": "mistralai/devstral-small"
+# }
+
+# def query_openrouter(model, messages):
+#     url = "https://openrouter.ai/api/v1/chat/completions"
+#     headers = {
+#     "Authorization": f"Bearer {API_KEY}",
+#     "Content-Type": "application/json",
+#     "X-Title": "Multi-Model Chatbot"
+# }
+#     data = {
+#         "model": "google/gemini-2.0-flash-001",
+#         "prompt": messages,
+#         "temperature": 0.7
+#     }
+#     response = requests.post(url, headers=headers, json=data)
+#     if response.status_code == 200:
+#         return response.json()["choices"][0]["text"]
+#     else:
+#         return f"❌ Error: {response.text}"
+
+# message = query_openrouter("Mistral Small", "hello")
+# print(message)
+
